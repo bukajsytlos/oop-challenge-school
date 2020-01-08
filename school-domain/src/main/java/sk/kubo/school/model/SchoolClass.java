@@ -22,6 +22,7 @@ public class SchoolClass {
 
     public void assignStudent(Student student) {
         students.add(student);
+        student.assignClass(this);
     }
 
     public boolean containsStudent(Student student) {

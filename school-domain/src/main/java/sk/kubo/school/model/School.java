@@ -3,7 +3,6 @@ package sk.kubo.school.model;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class School {
@@ -18,7 +17,10 @@ public class School {
         if (schoolClasses.size() < MIN_CLASS_COUNT) {
             throw new IllegalArgumentException("Cannot create school with less than " + MIN_CLASS_COUNT + " classes");
         }
-        schoolClasses.forEach(schoolClass -> establishSchoolClass(schoolClass.getName(), schoolClass.getTeacher(), schoolClass.getStudents()));
+        schoolClasses.forEach(schoolClass -> {
+            final Set<Student> students = schoolClass.getStudents().stream().map(student -> new Student(student.getName())).collect(Collectors.toSet());
+            establishSchoolClass(schoolClass.getName(), schoolClass.getTeacher(), students);
+        });
     }
 
     public Teacher hireTeacher(String name) {
@@ -40,13 +42,11 @@ public class School {
     }
 
     public void establishSchoolClass(String name, Teacher teacher, Set<Student> students) {
-        students.forEach(this::checkStudentIsAlreadyAssignedToClass);
         final SchoolClass newSchoolClass = new SchoolClass(name, teacher, students);
         schoolClasses.add(newSchoolClass);
     }
 
     public void assignStudentToSchoolClass(Student student, SchoolClass schoolClass) {
-        checkStudentIsAlreadyAssignedToClass(student);
         schoolClass.assignStudent(student);
     }
 
@@ -75,21 +75,7 @@ public class School {
     }
 
     public Map<SchoolClass, Double> calculateAverageGradeBySchoolClasses() {
-        return schoolClasses.stream()
-            .collect(Collectors.toMap(Function.identity(), schoolClass -> schoolClass.getStudents().stream()
-                .flatMap(student -> studentSubjects.stream().filter(studentSubject -> studentSubject.getStudent().equals(student)))
-                .mapToInt(studentSubject -> studentSubject.getGrade().getScore())
-                .average()
-                .orElseThrow(() -> new IllegalStateException("No grades for class [" + schoolClass.getName() + "]")
-            )));
-    }
-
-    private void checkStudentIsAlreadyAssignedToClass(Student student) {
-        schoolClasses.stream()
-            .filter(schoolClassEntry -> schoolClassEntry.containsStudent(student))
-            .findFirst()
-            .ifPresent(studentClass -> {
-                throw new IllegalArgumentException("Student [" + student.getName() + "] already assigned to class [" + studentClass.getName() + "]");
-            });
+        return studentSubjects.stream()
+            .collect(Collectors.groupingBy(studentSubject -> studentSubject.getStudent().getSchoolClass(), Collectors.averagingInt(studentSubject -> studentSubject.getGrade().getScore())));
     }
 }

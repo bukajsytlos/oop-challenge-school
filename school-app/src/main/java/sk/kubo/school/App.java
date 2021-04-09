@@ -1,12 +1,7 @@
 package sk.kubo.school;
 
-import java.sql.SQLOutput;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import sk.kubo.school.model.Grade;
 import sk.kubo.school.model.School;
@@ -41,29 +36,29 @@ public class App {
         final Subject subject5 = school.createSubject("Subject 5", teacher2);
         final Subject subject6 = school.createSubject("Subject 6", teacher3);
 
-        school.assignStudentToSubject(student1, subject1);
+        school.registerStudentAttendance(student1, subject1);
         school.giveGrade(teacher1, subject1, student1, Grade._1);
-        school.assignStudentToSubject(student1, subject2);
+        school.registerStudentAttendance(student1, subject2);
         school.giveGrade(teacher2, subject2, student1, Grade._2);
-        school.assignStudentToSubject(student2, subject2);
+        school.registerStudentAttendance(student2, subject2);
         school.giveGrade(teacher2, subject2, student2, Grade._3);
-        school.assignStudentToSubject(student2, subject3);
+        school.registerStudentAttendance(student2, subject3);
         school.giveGrade(teacher3, subject3, student2, Grade._4);
-        school.assignStudentToSubject(student3, subject3);
+        school.registerStudentAttendance(student3, subject3);
         school.giveGrade(teacher3, subject3, student3, Grade._5);
-        school.assignStudentToSubject(student3, subject4);
+        school.registerStudentAttendance(student3, subject4);
         school.giveGrade(teacher1, subject4, student3, Grade._1);
-        school.assignStudentToSubject(student4, subject4);
+        school.registerStudentAttendance(student4, subject4);
         school.giveGrade(teacher1, subject4, student4, Grade._2);
-        school.assignStudentToSubject(student4, subject5);
+        school.registerStudentAttendance(student4, subject5);
         school.giveGrade(teacher2, subject5, student4, Grade._3);
-        school.assignStudentToSubject(student5, subject5);
+        school.registerStudentAttendance(student5, subject5);
         school.giveGrade(teacher2, subject5, student5, Grade._4);
-        school.assignStudentToSubject(student5, subject6);
+        school.registerStudentAttendance(student5, subject6);
         school.giveGrade(teacher3, subject6, student5, Grade._5);
-        school.assignStudentToSubject(student6, subject6);
+        school.registerStudentAttendance(student6, subject6);
         school.giveGrade(teacher3, subject6, student6, Grade._1);
-        school.assignStudentToSubject(student6, subject1);
+        school.registerStudentAttendance(student6, subject1);
         school.giveGrade(teacher1, subject1, student6, Grade._2);
 
         final Map<Student, Double> averageGradeByStudent = school.calculateAverageGradeByStudents();

@@ -13,8 +13,8 @@ public class Teacher {
         return name;
     }
 
-    public void giveGrade(StudentSubject studentSubject, Grade grade) {
-        studentSubject.giveGrade(this, grade);
+    public void giveGrade(Attendance attendance, Grade grade) {
+        attendance.giveGrade(this, grade);
     }
 
     @Override

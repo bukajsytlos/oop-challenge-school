@@ -11,7 +11,7 @@ public class School {
     private final Set<Teacher> teachers = new HashSet<>();
     private final Set<Student> students = new HashSet<>();
     private final Set<Subject> subjects = new HashSet<>();
-    private final Set<StudentSubject> studentSubjects = new HashSet<>();
+    private final Set<Attendance> attendances = new HashSet<>();
 
     public School(Set<SchoolClass> schoolClasses) {
         if (schoolClasses.size() < MIN_CLASS_COUNT) {
@@ -50,32 +50,32 @@ public class School {
         schoolClass.assignStudent(student);
     }
 
-    public void assignStudentToSubject(Student student, Subject subject) {
-        final StudentSubject studentSubject = new StudentSubject(student, subject);
-        studentSubjects.add(studentSubject);
+    public void registerStudentAttendance(Student student, Subject subject) {
+        final Attendance attendance = new Attendance(student, subject);
+        attendances.add(attendance);
     }
 
     public void giveGrade(Teacher teacher, Subject subject, Student student, Grade grade) {
-        final StudentSubject studentSubjectToFind = new StudentSubject(student, subject);
-        final StudentSubject studentSubject = studentSubjects.stream()
-            .filter(studentSubjectEntry -> studentSubjectEntry.equals(studentSubjectToFind))
+        final Attendance attendanceToFind = new Attendance(student, subject);
+        final Attendance attendance = attendances.stream()
+            .filter(attendanceEntry -> attendanceEntry.equals(attendanceToFind))
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Cannot give grade to student[" + student.getName() + "] since he/she is not attending subject [" + subject.getName() + "]"));
-        teacher.giveGrade(studentSubject, grade);
+        teacher.giveGrade(attendance, grade);
     }
 
     public Map<Student, Double> calculateAverageGradeByStudents() {
-        return studentSubjects.stream()
-            .collect(Collectors.groupingBy(StudentSubject::getStudent, Collectors.averagingInt(studentSubject -> studentSubject.getGrade().getScore())));
+        return attendances.stream()
+            .collect(Collectors.groupingBy(Attendance::getStudent, Collectors.averagingInt(attendance -> attendance.getGrade().getScore())));
     }
 
     public Map<Subject, Double> calculateAverageGradeBySubjects() {
-        return studentSubjects.stream()
-            .collect(Collectors.groupingBy(StudentSubject::getSubject, Collectors.averagingInt(studentSubject -> studentSubject.getGrade().getScore())));
+        return attendances.stream()
+            .collect(Collectors.groupingBy(Attendance::getSubject, Collectors.averagingInt(attendance -> attendance.getGrade().getScore())));
     }
 
     public Map<SchoolClass, Double> calculateAverageGradeBySchoolClasses() {
-        return studentSubjects.stream()
-            .collect(Collectors.groupingBy(studentSubject -> studentSubject.getStudent().getSchoolClass(), Collectors.averagingInt(studentSubject -> studentSubject.getGrade().getScore())));
+        return attendances.stream()
+            .collect(Collectors.groupingBy(attendance -> attendance.getStudent().getSchoolClass(), Collectors.averagingInt(attendance -> attendance.getGrade().getScore())));
     }
 }

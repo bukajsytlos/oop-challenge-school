@@ -2,17 +2,17 @@ package sk.kubo.school.model;
 
 import java.util.Objects;
 
-public class StudentSubject {
+public class Attendance {
     private final Student student;
     private final Subject subject;
     private Grade grade;
 
-    public StudentSubject(Student student, Subject subject) {
+    public Attendance(Student student, Subject subject) {
         this.student = student;
         this.subject = subject;
     }
 
-    public StudentSubject(Student student, Subject subject, Grade grade) {
+    public Attendance(Student student, Subject subject, Grade grade) {
         this.student = student;
         this.subject = subject;
         this.grade = grade;
@@ -47,8 +47,8 @@ public class StudentSubject {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof StudentSubject)) return false;
-        StudentSubject that = (StudentSubject) o;
+        if (!(o instanceof Attendance)) return false;
+        Attendance that = (Attendance) o;
         return student.equals(that.student) &&
             subject.equals(that.subject);
     }
